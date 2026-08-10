@@ -1,0 +1,191 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StudentType {
+  FREE
+  PAID
+}
+enum LessonType {
+  VIDEO
+  PDF
+}
+enum CourseStatus {
+  Draft
+  Published
+  Archived
+}
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED  
+}
+model EmailVerification {
+  id        String   @id @default(uuid())
+  email     String
+  otp       String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
+
+model User {
+  id                 String        @id @default(uuid())
+  email              String        @unique
+  fname              String
+  lname              String
+  password           String?
+  mobile             String?
+  joined_date        DateTime      @default(now())
+  verification_code  String?       // reset token
+  reset_token_expiry DateTime?     // token expiry
+  gender_id          Int?
+  user_type_id       Int
+  status_id          Int
+  aboutMe            String?       @db.VarChar(500)
+  student_type       StudentType   @default(FREE)
+  
+  // New fields for profile completion
+  profile_completed  Boolean       @default(false)
+  profile_updated_at DateTime?
+
+    
+  // New field for payments
+  is_paid            Boolean       @default(false)
+  payment_date       DateTime?
+  
+  enrollments        Enrollment[]
+  LessonProgress     LessonProgress[]
+}
+
+model Section {
+  id               String       @id @default(uuid())
+  title            String
+  description      String
+  dateCreated      DateTime     @default(now())
+  fileKey          String
+  smallDescription String
+  slug             String       @unique
+  status           CourseStatus @default(Draft)
+
+  chapters    Chapter[]
+  enrollments Enrollment[]
+}
+
+model Chapter {
+  id               String    @id @default(uuid())
+  title            String
+  position         Int
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  fileKey          String?
+  description      String?
+  smallDescription String?
+  section          Section   @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId        String
+
+  topics Topic[]
+  lessons Lesson[] // keep for backwards compatibility: lessons may belong to chapter directly
+}
+
+model Topic {
+  id        String   @id @default(uuid())
+  title     String
+  position  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterId String
+
+  lessons   Lesson[]
+}
+model Coupon {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  discount  Float
+  maxUses   Int?
+  usedCount Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  expiresAt DateTime?
+  
+  @@map("coupons")
+}
+
+model Payment {
+  id          String        @id @default(cuid())
+  email       String
+  fullName    String
+  amount      Float
+  discount    Float        @default(0)
+  finalAmount Float
+  couponCode  String?
+  paymentDate DateTime     @default(now())
+  slipUrl     String?
+  status      PaymentStatus @default(PENDING)  // ✅ Fixed: using enum
+  completedAt DateTime?    
+  notes       String?      
+  @@map("payments")
+}
+
+model Lesson {
+  id             String     @id @default(uuid())
+  title          String
+  description    String?
+  thumbnailUrl   String?
+  videoUrl       String?
+  pdfUrl         String?
+  lessonType     LessonType? // New enum column to indicate type
+  videoDuration  String?     // <-- Add this field
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  chapter        Chapter    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterId      String
+
+  topic          Topic?     @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId        String?
+
+  position       Int
+
+  LessonProgress LessonProgress[]
+}
+
+
+model Enrollment {
+  id        String   @id @default(uuid())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  section   Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId String
+
+  createdAt DateTime @default(now())
+}
+
+
+model LessonProgress{
+  id String @id @default(uuid())
+  completed Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User User @relation(fields: [userId], references: [id],onDelete:Cascade)
+  userId String
+  lessons Lesson @relation(fields: [LessonId],references: [id], onDelete:Cascade)
+  LessonId String
+
+  @@unique([userId,LessonId])
+}

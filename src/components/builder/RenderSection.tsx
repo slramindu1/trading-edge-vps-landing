@@ -6,7 +6,7 @@ import SectionBadge from "@/components/ui/section-badge";
 
 async function getSectionData(key: string) {
   try {
-    let lmsUrl = process.env.NEXT_PUBLIC_LMS_URL || "http://localhost:3000";
+    let lmsUrl = process.env.INTERNAL_LMS_URL || process.env.NEXT_PUBLIC_LMS_URL || "http://localhost:3000";
     let res = await fetch(`${lmsUrl}/api/public/builder?key=${key}`, { cache: 'no-store' });
     
     // If it fails and we are using default, try 3001 (in case LMS is on 3001)

@@ -16,30 +16,27 @@ async function getSectionData(key: string) {
     }
 
     if (!res.ok) {
-      console.error("Failed to fetch builder section", key);
-      return null;
+      const errText = await res.text();
+      console.error(`Failed to fetch builder section ${key}:`, errText);
+      return { error: true, details: `HTTP ${res.status}: ${errText}` };
     }
     return res.json();
-  } catch (e) {
-    console.error("Error fetching builder section on 3000:", e);
-    // If connection refused, try 3001
-    try {
-      if (!process.env.NEXT_PUBLIC_LMS_URL) {
-        const res2 = await fetch(`http://localhost:3001/api/public/builder?key=${key}`, { cache: 'no-store' });
-        if (res2.ok) return res2.json();
-      }
-    } catch (err) {}
-    return null;
+  } catch (e: any) {
+    console.error("Error fetching builder section:", e);
+    return { error: true, details: e.message || "Fetch failed" };
   }
 }
 
 export async function RenderSection({ sectionKey }: { sectionKey: string }) {
   const data = await getSectionData(sectionKey);
+  const isError = !data || data.error;
+  const errorDetails = data?.details || (data?.error && typeof data.error === 'string' ? data.error : "Unknown error");
   
-  if (!data || data.error) {
+  if (isError) {
     if (sectionKey === "landing-testimonials") {
       return (
         <Wrapper id="results">
+          <script dangerouslySetInnerHTML={{ __html: `console.error("RenderSection Server Error for ${sectionKey}:", ${JSON.stringify(errorDetails)});` }} />
           <div className="hidden md:block absolute top-0 -right-1/3 w-72 h-72 bg-blue-500 rounded-full blur-[10rem] -z-10"></div>
           <Container className="flex flex-col items-center justify-center">
             <div className="max-w-md mx-auto text-center">

@@ -37,10 +37,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { RenderSection } from "@/components/builder/RenderSection";
 
-export const dynamic = 'force-dynamic';
-
-
-
 
 const HomePage = () => {
   const firstRow = reviews.slice(0, reviews.length / 2);

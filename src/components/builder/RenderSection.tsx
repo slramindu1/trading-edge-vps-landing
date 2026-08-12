@@ -78,7 +78,7 @@ export async function RenderSection({ sectionKey }: { sectionKey: string }) {
                     key={index}
                     className="overflow-hidden rounded-2xl shadow-lg mb-4 break-inside-avoid group relative"
                   >
-                    <img
+                    <Image
                       src={src}
                       alt={`Image ${index + 1}`}
                       width={600}

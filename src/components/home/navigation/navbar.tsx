@@ -48,7 +48,7 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <>
               <Link
-                href="https://lms.tradingedgefx.com/Login/sign_in.php"
+                href="https://lms.tradingedgefx.com/"
                 className={buttonVariants({ size: "sm", variant: "ghost" })}
               >
                 Login

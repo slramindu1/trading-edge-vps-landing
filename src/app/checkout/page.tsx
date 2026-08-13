@@ -196,8 +196,10 @@ export default function CheckoutPage() {
       if (data.success) {
         setIsEmailVerified(true);
         toast.success("Email address verified successfully.");
-        if (data.user?.name) {
-          setFullName(data.user.name);
+        // Only autofill name if it's a real name (not blank or placeholder)
+        const returnedName = data.user?.name?.trim() || '';
+        if (returnedName && returnedName.toLowerCase() !== 'guest user' && returnedName !== ' ') {
+          setFullName(returnedName);
         }
       } else {
         toast.error(data.message || "Invalid or expired code.");

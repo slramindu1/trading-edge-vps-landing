@@ -41,16 +41,16 @@ export async function POST(request: NextRequest) {
         }
       })
     } else {
-      // Create new user (guest)
+      // Create a placeholder user account (inactive) — will be activated on payment approval
       user = await prisma.user.create({
         data: {
           email,
-          fname: 'Guest',
-          lname: 'User',
+          fname: '',
+          lname: '',
           verification_code: code,
           reset_token_expiry: new Date(Date.now() + 10 * 60 * 1000),
-          user_type_id: 2, // Guest user type
-          status_id: 1,    // Active status
+          user_type_id: 2, // Student
+          status_id: 2,    // Inactive until payment approved
           mobile: '',
           aboutMe: ''
         }

@@ -3,9 +3,13 @@ import { SITE_CONFIG } from "@/config";
 import { cn } from "@/lib/utils";
 import "../styles/globals.css";
 import { Inter } from "next/font/google";
-import Script from "next/script"; // ✅ Import Next.js Script component
+import Script from "next/script";
 
-const font = Inter({ subsets: ["latin"] });
+const font = Inter({ 
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+});
 
 export const metadata = SITE_CONFIG;
 
@@ -16,6 +20,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://iframe.mediadelivery.net" />
+      </head>
       <body
         className={cn(
           "min-h-screen bg-background text-foreground antialiased max-w-full overflow-x-hidden",

@@ -10,31 +10,32 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { LampContainer } from "@/components/ui/lamp";
 import Marquee from "@/components/ui/marquee";
 import SectionBadge from "@/components/ui/section-badge";
+import dynamicImport from "next/dynamic";
+
+const LampContainer = dynamicImport(
+  () => import("@/components/ui/lamp").then((mod) => mod.LampContainer),
+  { ssr: false }
+);
+
 import {
   features,
-  perks,
   pricingCards,
   reviews,
   faqs,
   curiculam,
-  galleryItems,
 } from "@/constants";
 import { cn } from "@/lib/utils";
 import {
   ArrowRight,
-  Badge,
   CheckCircle,
   ChevronRight,
-  CirclePlay,
   UserIcon,
   Zap,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { RenderSection } from "@/components/builder/RenderSection";
 
 export const dynamic = 'force-dynamic';

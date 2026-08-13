@@ -84,6 +84,7 @@ export async function RenderSection({ sectionKey }: { sectionKey: string }) {
                       alt={`Image ${index + 1}`}
                       width={600}
                       height={400}
+                      loading={index < 3 ? "eager" : "lazy"}
                       className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>

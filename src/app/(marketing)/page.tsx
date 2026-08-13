@@ -558,6 +558,21 @@ const HomePage = () => {
       </Wrapper>
 
       {/* {testimonails section 2} */}
+      <Wrapper id="results" className="flex flex-col items-center justify-center relative pt-12">
+        <div className="hidden md:block absolute top-0 -right-1/3 w-72 h-72 bg-blue-500 rounded-full blur-[10rem] -z-10"></div>
+        <Container className="flex flex-col items-center justify-center">
+          <div className="max-w-md mx-auto text-center mb-4">
+            <SectionBadge title="Our Result" />
+            <h2 className="text-3xl lg:text-4xl font-semibold mt-6">
+              We worked with thousands of amazing people
+            </h2>
+            <p className="text-muted-foreground mt-6">
+              You Can Read And Understand Our Student Comments
+            </p>
+          </div>
+        </Container>
+      </Wrapper>
+
       <RenderSection sectionKey="landing-testimonials" />
 
       {/* pricing */}

@@ -12,12 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Marquee from "@/components/ui/marquee";
 import SectionBadge from "@/components/ui/section-badge";
-import dynamicImport from "next/dynamic";
-
-const LampContainer = dynamicImport(
-  () => import("@/components/ui/lamp").then((mod) => mod.LampContainer),
-  { ssr: false }
-);
+import { LampContainer } from "@/components/ui/lamp";
 
 import {
   features,

@@ -6,18 +6,10 @@ export const SITE_CONFIG: Metadata = {
         default: "Trading Edge ",
         template: `%s | `
     },
-    description: "Learn Forex Trading On The Lowest Price In Sri Lnaka",
-    icons: {
-        icon: [
-            {
-                url: "#",
-                href: "/logos/icon_logo.png",
-            }
-        ]
-    },
+    description: "Learn Forex Trading On The Lowest Price In Sri Lanka",
     openGraph: {
         title: "Trading Edge ",
-        description: "Learn Forex Trading On The Lowest Price In Sri Lnaka",
+        description: "Learn Forex Trading On The Lowest Price In Sri Lanka",
         images: [
             {
                 url: "/logos/icon_logo.png",
@@ -28,7 +20,7 @@ export const SITE_CONFIG: Metadata = {
         card: "summary_large_image",
         creator: "@shreyassihasane",
         title: "Trading Edge ",
-        description: "Learn Forex Trading On The Lowest Price In Sri Lnaka",
+        description: "Learn Forex Trading On The Lowest Price In Sri Lanka",
         images: [
             {
                 url: "/logos/icon_logo.png",

@@ -326,7 +326,7 @@ const HomePage = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="relative z-10">
                   <Image
-                    src="/assets/poster3.svg"
+                    src="/assets/poster3.webp"
                     alt="The Fanatic Way Course Preview"
                     width={600}
                     height={600}
@@ -436,7 +436,7 @@ const HomePage = () => {
 
                 <div className="relative z-10">
                   <Image
-                    src="/assets/poster1.svg"
+                    src="/assets/poster1.webp"
                     alt="The Fanatic Way Course Preview"
                     width={600}
                     height={600}
@@ -451,7 +451,7 @@ const HomePage = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="relative z-10">
                   <Image
-                    src="/assets/poster2.svg"
+                    src="/assets/poster2.webp"
                     alt="The Fanatic Way Course Preview"
                     width={600}
                     height={600}

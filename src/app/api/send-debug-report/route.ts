@@ -21,7 +21,7 @@ export async function POST(request: Request) {
 
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: 'ramindu.jiat@gmail.com',
+            to: process.env.ALERT_EMAIL || 'ramindu.jiat@gmail.com',
             subject: `🚨 UI Bug Alert: Text Stuck at Opacity 0 on ${data.url}`,
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; padding: 20px; border: 1px solid #eee; border-radius: 8px;">

@@ -6,21 +6,23 @@ export async function POST(request: Request) {
         const data = await request.json();
 
         // Check if environment variables are set
-        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-            console.error("EMAIL_USER or EMAIL_PASSWORD is not set in .env");
+        if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+            console.error("SMTP_USER or SMTP_PASS is not set in .env");
             return NextResponse.json({ success: false, error: 'Email credentials not configured' }, { status: 500 });
         }
 
         const transporter = nodemailer.createTransport({
-            service: 'gmail', // Using Gmail, assuming standard SMTP
+            host: process.env.SMTP_HOST,
+            port: Number(process.env.SMTP_PORT) || 587,
+            secure: process.env.SMTP_SECURE === "true",
             auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASSWORD,
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
             },
         });
 
         const mailOptions = {
-            from: process.env.EMAIL_USER,
+            from: process.env.SMTP_USER,
             to: process.env.ALERT_EMAIL || 'ramindu.jiat@gmail.com',
             subject: `🚨 UI Bug Alert: Text Stuck at Opacity 0 on ${data.url}`,
             html: `

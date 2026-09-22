@@ -33,32 +33,7 @@ const Container = ({ children, className, delay = 0.2, reverse }: Props) => {
 
                 // ONLY trigger bug report if it's physically on screen BUT stuck at opacity 0
                 if (isInPhysicalViewport && (opacity === "0" || visibility === "hidden")) {
-                    console.error("Text loading stuck at opacity 0 on screen! Sending debug report...");
-                    
-                    const debugData = {
-                        timestamp: new Date().toISOString(),
-                        url: window.location.href,
-                        userAgent: navigator.userAgent,
-                        hydrationState: hasHydrated ? "Hydrated" : "Not Hydrated",
-                        viewportStatus: viewportStatus,
-                        animationStatus: animationStatus,
-                        computedOpacity: opacity,
-                        computedVisibility: visibility,
-                        className: className || "No class"
-                    };
-
-                    try {
-                        await fetch("/api/send-debug-report", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(debugData)
-                        });
-                        console.log("Debug report sent successfully.");
-                    } catch (err) {
-                        console.error("Failed to send debug report", err);
-                    }
+                    console.warn("Text loading stuck at opacity 0! Applying emergency fallback...");
 
                     // EMERGENCY FALLBACK: Force the content to appear
                     ref.current.style.opacity = "1";

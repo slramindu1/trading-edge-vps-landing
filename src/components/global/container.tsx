@@ -53,6 +53,11 @@ const Container = ({ children, className, delay = 0.2, reverse }: Props) => {
                     } catch (err) {
                         console.error("Failed to send debug report", err);
                     }
+
+                    // EMERGENCY FALLBACK: Force the content to appear so the site isn't broken for the user
+                    ref.current.style.opacity = "1";
+                    ref.current.style.visibility = "visible";
+                    ref.current.style.transform = "translateY(0)";
                 }
             }
         }, 3000); // Check 3 seconds after mount
@@ -66,7 +71,7 @@ const Container = ({ children, className, delay = 0.2, reverse }: Props) => {
             className={cn("w-full h-full", className)}
             initial={{ opacity: 0, y: reverse ? -20 : 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "100px", amount: "some" }}
             transition={{ delay: delay, duration: 0.4, ease: "easeInOut" }}
             onViewportEnter={() => setViewportStatus("Entered Viewport")}
             onViewportLeave={() => setViewportStatus("Left Viewport")}

@@ -22,12 +22,18 @@ const Container = ({ children, className, delay = 0.2, reverse }: Props) => {
 
         const timer = setTimeout(async () => {
             if (ref.current) {
+                // Get physical position on the screen
+                const rect = ref.current.getBoundingClientRect();
+                // Check if element is currently inside the visible window area
+                const isInPhysicalViewport = rect.top < window.innerHeight && rect.bottom > 0;
+
                 const computedStyle = window.getComputedStyle(ref.current);
                 const opacity = computedStyle.getPropertyValue("opacity");
                 const visibility = computedStyle.getPropertyValue("visibility");
 
-                if (opacity === "0" || visibility === "hidden") {
-                    console.error("Text loading stuck at opacity 0! Sending debug report...");
+                // ONLY trigger bug report if it's physically on screen BUT stuck at opacity 0
+                if (isInPhysicalViewport && (opacity === "0" || visibility === "hidden")) {
+                    console.error("Text loading stuck at opacity 0 on screen! Sending debug report...");
                     
                     const debugData = {
                         timestamp: new Date().toISOString(),
@@ -54,7 +60,7 @@ const Container = ({ children, className, delay = 0.2, reverse }: Props) => {
                         console.error("Failed to send debug report", err);
                     }
 
-                    // EMERGENCY FALLBACK: Force the content to appear so the site isn't broken for the user
+                    // EMERGENCY FALLBACK: Force the content to appear
                     ref.current.style.opacity = "1";
                     ref.current.style.visibility = "visible";
                     ref.current.style.transform = "translateY(0)";

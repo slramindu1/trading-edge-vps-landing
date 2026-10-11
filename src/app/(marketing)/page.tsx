@@ -608,7 +608,9 @@ const HomePage = () => {
                     )}
                   >
                     <CardHeader className="border-b border-border">
-                      <span>{card.title}</span>
+                      <span className="text-xl md:text-2xl font-bold text-white tracking-wide">
+                        {card.title}
+                      </span>
                       <CardTitle className="flex items-baseline justify-center text-white my-3">
                         <span className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
                           {currency}

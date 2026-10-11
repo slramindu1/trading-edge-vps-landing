@@ -593,26 +593,37 @@ const HomePage = () => {
         <Container className="flex flex-col items-center justify-center">
           <div className="w-full flex justify-center py-10 md:py-20">
             <div className="grid grid-cols-1 gap-5 md:gap-8 max-w-4xl w-full place-items-center">
-              {pricingCards.map((card) => (
-                <Card
-                  key={card.title}
-                  className={cn(
-                    "flex flex-col w-full max-w-sm border-neutral-700 text-center",
-                    card.title === "Unlimited Saas" && "border-2 border-primary"
-                  )}
-                >
-                  <CardHeader className="border-b border-border">
-                    <span>{card.title}</span>
-                    <CardTitle
-                      className={cn(
-                        card.title !== "Unlimited Saas" &&
-                          "text-muted-foreground"
-                      )}
-                    >
-                      {card.price}
-                    </CardTitle>
-                    <CardDescription>{card.description}</CardDescription>
-                  </CardHeader>
+              {pricingCards.map((card) => {
+                const priceMatch = card.price.match(/^(\$?)(\d+)(\$?)(.*)$/);
+                const currency = priceMatch ? (priceMatch[1] || priceMatch[3] || "$") : "$";
+                const amount = priceMatch ? priceMatch[2] : card.price;
+                const period = priceMatch ? priceMatch[4] : "";
+
+                return (
+                  <Card
+                    key={card.title}
+                    className={cn(
+                      "flex flex-col w-full max-w-sm border-neutral-700 text-center",
+                      card.title === "Unlimited Saas" && "border-2 border-primary"
+                    )}
+                  >
+                    <CardHeader className="border-b border-border">
+                      <span>{card.title}</span>
+                      <CardTitle className="flex items-baseline justify-center text-white my-3">
+                        <span className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+                          {currency}
+                        </span>
+                        <span className="text-5xl md:text-6xl font-black text-white tracking-tight ml-0.5">
+                          {amount}
+                        </span>
+                        {period && (
+                          <span className="text-sm md:text-base font-medium text-muted-foreground ml-1.5">
+                            {period}
+                          </span>
+                        )}
+                      </CardTitle>
+                      <CardDescription>{card.description}</CardDescription>
+                    </CardHeader>
                   <CardContent className="pt-6 space-y-3">
                     {card.features.map((feature) => (
                       <div key={feature} className="flex items-center gap-2">
@@ -634,7 +645,8 @@ const HomePage = () => {
                     </Link>
                   </CardFooter>
                 </Card>
-              ))}
+              );
+            })}
             </div>
           </div>
         </Container>

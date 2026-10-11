@@ -612,7 +612,7 @@ const HomePage = () => {
                         {card.title}
                       </span>
                       <CardTitle className="flex items-baseline justify-center text-white my-3">
-                        <span className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+                        <span className="text-2xl md:text-3xl font-semibold text-white tracking-tight">
                           {currency}
                         </span>
                         <span className="text-5xl md:text-6xl font-black text-white tracking-tight ml-0.5">

@@ -8,8 +8,9 @@ export async function POST(request: NextRequest) {
 
   try {
     const { code } = await request.json();
+    const trimmedCode = typeof code === "string" ? code.trim() : "";
 
-    if (!code) {
+    if (!trimmedCode) {
       return NextResponse.json(
         { success: false, message: "Coupon code is required" },
         { status: 400 }
@@ -18,7 +19,10 @@ export async function POST(request: NextRequest) {
 
     const coupon = await prisma.coupon.findFirst({
       where: {
-        code,
+        code: {
+          equals: trimmedCode,
+          mode: "insensitive",
+        },
         isActive: true,
       },
     });
@@ -27,6 +31,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { success: false, message: "Coupon code not found" },
         { status: 404 }
+      );
+    }
+
+    const now = new Date();
+    if (coupon.startsAt && now < coupon.startsAt) {
+      return NextResponse.json(
+        { success: false, message: "This discount is not active yet" },
+        { status: 400 }
+      );
+    }
+
+    if (coupon.expiresAt && now > coupon.expiresAt) {
+      return NextResponse.json(
+        { success: false, message: "Coupon code has expired" },
+        { status: 400 }
+      );
+    }
+
+    if (coupon.maxUses !== null && coupon.usedCount >= coupon.maxUses) {
+      return NextResponse.json(
+        { success: false, message: "Coupon usage limit reached" },
+        { status: 400 }
       );
     }
 

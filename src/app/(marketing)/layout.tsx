@@ -1,4 +1,4 @@
-import { Footer, Navbar } from "@/components";
+import { BlackFridayBanner, Footer, Navbar } from "@/components";
 import React from 'react'
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
 const MarketingLayout = ({ children }: Props) => {
     return (
         <div className="flex flex-col items-center w-full">
+            <BlackFridayBanner />
             <Navbar />
             {children}
             <Footer />
